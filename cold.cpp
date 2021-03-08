@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #define rep(x, start, end) for (int x = start; x < end; x++)
 #define rdi(x) int x; cin >> x;
-#define rdrp(x) rdi(x) for (; x > 0; x--)
+#define rdrp(x) rdi(x); for (; x > 0; x--)
 #define pb(x) push_back(x)
 #define mp(x,y) make_pair(x,y)
 using namespace std;
@@ -15,5 +15,12 @@ int main() {
   ios::sync_with_stdio(false);
   cin.tie(NULL);
 
+  int total = 0;
+  rdrp(N){
+    int t;
+    cin >> t;
+    total += (t < 0);
+  }
+  cout << total;
   return 0;
 }
