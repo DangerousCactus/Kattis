@@ -7,6 +7,37 @@ typedef long long ll;
 typedef vector<int> vi;
 typedef vector<vector<int>> vii;
 
+vector<int> doRow(list<int> d) {  // default to left
+  d.remove(0);
+  vector<int> out;
+
+  while (!d.empty()) {
+    int curr = d.front();
+    d.pop_front();
+
+    if (!d.empty() && d.front() == curr) {
+      out.push_back(curr * 2);
+      d.pop_front();
+    } else {
+      out.push_back(curr);
+    }
+  }
+
+  while (out.size() < 4) {
+    out.push_back(0);
+  }
+
+  return out;
+}
+
+vii transpose(vii v) {
+  rep(i, 0, v.size()) {
+    rep(j, i + 1, v.size()) { swap(v[i][j], v[j][i]); }
+  }
+
+  return v;
+}
+
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(NULL);
@@ -18,86 +49,55 @@ int main() {
   rep(y, 0, 4) {
     rep(x, 0, 4) {
       cin >> in;
-      board[x][y] = in;
+      board[y][x] = in;
     }
   }
 
   int dir;
   cin >> dir;
+  vector<vector<int>> vd;
 
-  if (dir == 0) {
-    rep(y, 0, 4) {
-      int cx = 0;
-      rep(x, 0, 4) {
-        if (x < 3 && board[x][y] == board[x + 1][y]) {
-          newBoard[cx][y] == 2 * board[x][y];
-          x++;
-        } else {
-          newBoard[cx][y] == board[x][y];
-        }
-        cx++;
-      }
-      while (cx++ < 4) {
-        newBoard[cx++][y] = 0;
-      }
+  if (dir == 0) {  // left
+    rep(i, 0, 4) vd.push_back(doRow(list<int>(&board[i][0], &board[i][4])));
+
+  } else if (dir == 3) {  // down
+    list<int> temp;
+    rep(i, 0, 4) {
+      temp.clear();
+      rep(j, 0, 4) { temp.push_back(board[3 - j][i]); }
+      vector<int> out = doRow(temp);
+      reverse(out.begin(), out.end());
+      vd.push_back(out);
     }
-  } else if (dir == 3) {
-    rep(y, 0, 4) {
-      int cx = 3;
-      rep(x, 0, 4) {
-        if (x < 3 && board[3 - x][y] == board[2 - x][y]) {
-          newBoard[cx][y] == 2 * board[x][y];
-          x--;
-        } else {
-          newBoard[cx][y] == board[x][y];
-        }
-        cx--;
-      }
-      while (cx-- >= 0) {
-        newBoard[cx][y] = 0;
-      }
+
+    vd = transpose(vd);
+
+  } else if (dir == 2) {  // right
+    rep(i, 0, 4) {
+      list<int> temp(&board[i][0], &board[i][4]);
+      temp.reverse();
+      vector<int> out = doRow(temp);
+      reverse(out.begin(), out.end());
+      vd.push_back(out);
     }
-  } else if (dir == 4) {
-    rep(x, 0, 4) {
-      int cy = 0;
-      rep(y, 0, 4) {
-        if (y < 3 && board[x][y] == board[x][y + 1]) {
-          newBoard[x][cy] == 2 * board[x][y];
-          y++;
-        } else {
-          newBoard[x][cy] == board[x][y];
-        }
-        cy++;
-      }
-      while (cy++ < 4) {
-        newBoard[x][cy] = 0;
-      }
+
+  } else if (dir == 1) {  // up
+    list<int> temp;
+    rep(i, 0, 4) {
+      temp.clear();
+      rep(j, 0, 4) { temp.push_back(board[j][i]); }
+
+      vd.push_back(doRow(temp));
     }
-  } else if (dir == 2) {
-    rep(x, 0, 4) {
-      int cy = 3;
-      rep(y, 0, 4) {
-        if (y < 3 && board[x][3 - y] == board[x][2 - y]) {
-          newBoard[x][cy] == 2 * board[x][y];
-          y--;
-        } else {
-          newBoard[x][cy] == board[x][y];
-        }
-        cy--;
-      }
-      while (cy-- >= 0) {
-        newBoard[x][cy] = 0;
-      }
-    }
+
+    vd = transpose(vd);
   }
 
-  rep(x, 0, 4) {
-    rep(y, 0, 4) {
-      cout << newBoard[x][y];
-      if (y != 3)
-        cout << ' ';
+  for (auto a : vd) {
+    for (auto b : a) {
+      cout << b << ' ';
     }
-    cout << "\n";
+    cout << '\n';
   }
 
   return 0;
