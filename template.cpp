@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#define rep(x, start, end) for (int x = start; x < end; x++)
+#define rep(x, start, end) for (int x = start; x < end; ++x)
 #define pb(x) push_back(x)
 #define mp(x,y) make_pair(x,y)
 using namespace std;
