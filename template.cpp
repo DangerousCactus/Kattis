@@ -2,6 +2,7 @@
 #define rep(x, start, end) for (int x = start; x < end; ++x)
 #define pb(x) push_back(x)
 #define mp(x,y) make_pair(x,y)
+#define all(x) x.begin(), x.end()
 using namespace std;
 
 typedef long long ll;
