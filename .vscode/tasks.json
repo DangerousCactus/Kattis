@@ -21,7 +21,7 @@
         {
             "label": "Submit to Kattis",
             "type": "shell",
-            "command": "python3 .submit.py ${fileBasename} -f",
+            "command": "python3 submit.py ${fileBasename} -f",
             "problemMatcher": [],
             "group": {
                 "kind": "test",
