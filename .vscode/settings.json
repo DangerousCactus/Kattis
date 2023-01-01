@@ -74,7 +74,9 @@
         "typeinfo": "cpp",
         "valarray": "cpp",
         "variant": "cpp",
-        "ciso646": "cpp"
+        "ciso646": "cpp",
+        "rope": "cpp",
+        "slist": "cpp"
     },
     "editor.tabSize": 2
 }
