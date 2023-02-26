@@ -1,41 +1,51 @@
 #include <bits/stdc++.h>
-#define rep(x, start, end) for (int x = start; x < end; ++x)
-#define pb(x) push_back(x)
-#define mp(x, y) make_pair(x, y)
-#define all(x) x.begin(), x.end()
 using namespace std;
+#define rep(i, a, b) for (int i = a; i < (b); ++i)
+#define all(x) begin(x), end(x)
+#define sz(x) (int)(x).size()
 
 typedef long long ll;
-typedef vector<int> vi;
 typedef pair<int, int> pii;
+typedef vector<int> vi;
+
+struct vegetable {
+  long double s;
+  int cuts = 1;
+
+  vegetable(long double s1, int c) : s(s1), cuts(c) {}
+};
+
+bool Compare(vegetable a, vegetable b) { return a.s / a.cuts < b.s / b.cuts; }
 
 int main() {
-  ios::sync_with_stdio(false);
-  cin.tie(NULL);
+  cin.tie(0)->sync_with_stdio(0);
 
-  long double t;
-  int n, x, currMin = INT_MAX;
+  long double t, m;
+  int n;
 
   cin >> t >> n;
 
-  priority_queue<int> weights;
+  priority_queue<vegetable, vector<vegetable>, decltype(&Compare)> pq(Compare);
+
+  long double mn = 1E7;
 
   rep(i, 0, n) {
-    cin >> x;
-    currMin = min(currMin, x);
-    weights.push(x);
+    cin >> m;
+    pq.emplace(m, 1);
+    mn = min(mn, m);
   }
 
-  while ((long double)currMin / weights.top()) {
-    x = weights.top();
-    weights.pop();
+  int cuts = 0;
+  while (mn / (pq.top().s / pq.top().cuts) < t) {
+    auto z = pq.top();
+    pq.pop();
 
-    currMin = min(currMin, x - weights.top());
-    
-    weights.push(weights.top());
-    weights.push(x - weights.top());
-
+    pq.emplace(z.s, z.cuts + 1);
+    mn = min(mn, z.s / (z.cuts + 1));
+    cuts++;
   }
+
+  cout << cuts;
 
   return 0;
 }

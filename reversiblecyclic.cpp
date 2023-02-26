@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i, a, b) for (int i = a; i < (b); ++i)
+#define all(x) begin(x), end(x)
+#define sz(x) (int)(x).size()
+
+typedef long long ll;
+typedef pair<int, int> pii;
+typedef vector<int> vi;
+
+int main() {
+  cin.tie(0)->sync_with_stdio(0);
+
+  string s;
+  cin >> s;
+
+  string sr = s;
+  reverse(all(sr));
+
+  rep(i, 0, s.size()) {
+    if (s == sr) {
+      cout << 1;
+      return 0;
+    }
+    s.push_back(s[0]);
+    s.erase(s.begin());
+  }
+  cout << 0;
+
+  return 0;
+}
