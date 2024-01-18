@@ -78,5 +78,6 @@
         "rope": "cpp",
         "slist": "cpp"
     },
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "C_Cpp.clang_format_fallbackStyle": "{ ColumnLimit: 120 }",
 }
