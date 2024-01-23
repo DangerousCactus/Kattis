@@ -2,63 +2,13 @@
 
 using namespace std;
 
-#define rep(i, a, b) for (int i = a; i < (b); ++i)
+#define rep(i, a, b) for(int i = a; i < (b); ++i)
 #define all(x) begin(x), end(x)
 #define sz(x) (int)(x).size()
 
 typedef long long ll;
 typedef pair<int, int> pii;
 typedef vector<int> vi;
-
-unordered_map<string, int> cache;
-bool first = true;
-
-int solve(string s) {
-  if (cache.count(s)) {
-    return cache[s];
-  }
-
-  if (sz(s) <= 1) {
-    return 0;
-  }
-
-  int mn = 10000;
-
-  if (!first) {
-    int mn = solve(s.substr(1, sz(s) - 2)) + 1;
-  }
-
-  first = false;
-
-  if (s.front() == s.back() || isupper(s.front()) && isupper(s.back())) {
-    mn = solve(s.substr(1, sz(s) - 2));
-  }
-
-  if (isupper(s.front()) && s.front() != toupper(s.back())) {
-    mn = solve(s.substr(1, sz(s) - 2));
-  }
-
-  if (isupper(s.back()) && s.back() != toupper(s.front())) {
-    mn = solve(s.substr(1, sz(s) - 2));
-  }
-
-  string s1 = s.substr(1, sz(s) - 2);
-  string s2 = s1;
-
-  if (sz(s1)) {
-    s1.front() = toupper(s1.front());
-    s2.back() = toupper(s2.back());
-  }
-
-  mn = min(mn, solve(s1) + 1);
-  mn = min(mn, solve(s2) + 1);
-
-  if (sz(s) >= 4) {
-    mn = min(mn, solve(s.substr(2, sz(s) - 4)) + 2);
-  }
-
-  return cache[s] = mn;
-}
 
 int main() {
   cin.tie(0)->sync_with_stdio(0);
@@ -67,5 +17,43 @@ int main() {
   string s;
   cin >> s;
 
-  cout << solve(s);
+  int n = sz(s);
+  vector<bool> comp;
+  map<pair<int, bool>, int> cache;
+
+  rep(i, 0, n / 2) {
+    comp.push_back(s[i] == s[n - 1 - i]);
+  }
+
+  function<int(int, bool)> solve = [&](int idx, bool force) -> int {
+      auto key = make_pair(idx, force);
+      if (cache.count(key)) {
+        return cache[key];
+      }
+
+      if (idx == n / 2) {
+        return 0;
+      }
+
+      int mn = 1000;
+
+      if (comp[idx]) {
+        if(force){
+          mn = min(mn, solve(idx + 1, true) + 1);
+          mn = min(mn, solve(idx + 1, false) + 1);
+        }else{
+          mn = min(mn, solve(idx + 1, false));
+        }
+      } else {
+        mn = min(mn, solve(idx + 1, true) + 1);
+        if (force) {
+          mn = min(mn, solve(idx + 1, false));
+          mn = min(mn, solve(idx + 1, true) + 1);
+        }
+      }
+
+      return cache[key] = mn;
+  };
+
+  cout << solve(0, false);
 }
