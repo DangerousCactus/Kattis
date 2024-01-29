@@ -1,1 +1,1 @@
-find . -maxdepth 1 ! -name "*.*" -delete
+find . -maxdepth 1 -name "*.exe" -delete
